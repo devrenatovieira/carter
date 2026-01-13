@@ -207,7 +207,7 @@ export default function ProductForm({
 
       if (!res?.ok) {
         if (res.fieldErrors) setErrors(res.fieldErrors);
-        if (res.formError) setErrors((prev) => ({ ...prev, _form: res.formError }));
+        if (res.formError) setErrors((prev) => ({ ...prev, _form: res.formError ?? "" }));
         return;
       }
 
