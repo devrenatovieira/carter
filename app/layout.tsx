@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
@@ -55,8 +55,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartHydrator />
           <AnalyticsScripts />
           <Header />
-          <LoadingOverlay />
-          <AnalyticsTracker />
+          <Suspense fallback={null}>
+            <LoadingOverlay />
+            <AnalyticsTracker />
+          </Suspense>
           <main className="container pt-24 pb-8 md:pt-28 md:pb-12">{children}</main>
           <Footer />
           <ConsentBanner />
