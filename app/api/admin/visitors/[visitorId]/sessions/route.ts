@@ -7,13 +7,13 @@ type Ctx = {
   params: Promise<{ visitorId: string }>;
 };
 
-export async function GET(_req: NextRequest, { params }: Ctx) {
+export async function GET(_req: NextRequest, ctx: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
 
-  const { visitorId } = await params;
+  const { visitorId } = await ctx.params;
   const sessions = await prisma.session.findMany({
     where: { visitorId },
     orderBy: { startedAt: "desc" }
