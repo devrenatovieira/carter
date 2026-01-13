@@ -1,10 +1,20 @@
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import AdminShell from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
+
+type SearchParams = {
+  from?: string | string[];
+  to?: string | string[];
+  origin?: string | string[];
+  country?: string | string[];
+  device?: string | string[];
+  returning?: string | string[];
+};
 
 function formatDuration(seconds: number) {
   const mins = Math.floor(seconds / 60);
@@ -31,16 +41,20 @@ function parseDate(value?: string) {
 export default async function AdminVisitorsPage({
   searchParams
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams?: SearchParams | Promise<SearchParams>;
 }) {
+  const sp = await Promise.resolve(searchParams ?? {});
   const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/admin/login");
+  }
 
-  const from = typeof searchParams.from === "string" ? searchParams.from : "";
-  const to = typeof searchParams.to === "string" ? searchParams.to : "";
-  const origin = typeof searchParams.origin === "string" ? searchParams.origin : "";
-  const country = typeof searchParams.country === "string" ? searchParams.country : "";
-  const device = typeof searchParams.device === "string" ? searchParams.device : "";
-  const returning = typeof searchParams.returning === "string" ? searchParams.returning : "";
+  const from = typeof sp.from === "string" ? sp.from : "";
+  const to = typeof sp.to === "string" ? sp.to : "";
+  const origin = typeof sp.origin === "string" ? sp.origin : "";
+  const country = typeof sp.country === "string" ? sp.country : "";
+  const device = typeof sp.device === "string" ? sp.device : "";
+  const returning = typeof sp.returning === "string" ? sp.returning : "";
   const queryString = new URLSearchParams(
     Object.entries({ from, to, origin, country, device, returning }).filter(([, value]) => value)
   ).toString();
