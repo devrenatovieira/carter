@@ -13,6 +13,14 @@ const sorters: Record<string, (a: Product, b: Product) => number> = {
   best: (a, b) => (b.soldCount || 0) - (a.soldCount || 0) || (a.manualRank || 99) - (b.manualRank || 99)
 };
 
+type FiltersState = {
+  category: string;
+  maxPrice: number;
+  rating: number;
+  fast: boolean;
+  tags: string[];
+};
+
 export default function CatalogClient({
   items,
   categories,
@@ -25,7 +33,7 @@ export default function CatalogClient({
   const searchParams = useSearchParams();
   const onlyOffers = searchParams.get('ofertas') === '1';
   const initialMaxPrice = items.length ? Math.max(...items.map((item) => item.price)) : 100;
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FiltersState>({
     category: 'all',
     maxPrice: initialMaxPrice,
     rating: 0,
