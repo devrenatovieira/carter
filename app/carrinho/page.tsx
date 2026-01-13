@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import Image from 'next/image';
 import useCart from '@/lib/cart';
 import { buildPaymentLink } from '@/lib/affiliate';
@@ -30,7 +29,7 @@ export default function CartPage() {
     multiItemFallback(true);
   };
 
-  const multiItemFallback = async (fromCheckout = false) => {
+  async function multiItemFallback(fromCheckout = false) {
     if (!fromCheckout) begin_checkout(cart.items);
     for (const item of cart.items) {
       const link = buildPaymentLink(item.product);
@@ -38,7 +37,7 @@ export default function CartPage() {
       await new Promise((r) => setTimeout(r, 600));
     }
     purchase_redirect('order-sequence');
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -104,7 +103,7 @@ export default function CartPage() {
               <div className="rounded-2xl border border-dashed border-[var(--border-subtle)] p-4 text-sm text-slate-300">
                 <p className="mb-3 font-medium text-ink-500">Finalize um item por vez (rapido e seguro).</p>
                 <p className="mb-4">Abriremos um link por item em nova aba.</p>
-                <Button onClick={multiItemFallback} variant="outline" className="w-full" disabled={!canCheckout}>
+                <Button onClick={() => multiItemFallback()} variant="outline" className="w-full" disabled={!canCheckout}>
                   Gerar links individuais
                 </Button>
               </div>
