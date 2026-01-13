@@ -7,13 +7,10 @@ import AdminShell from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
 
-type SearchParams = {
-  from?: string | string[];
-  to?: string | string[];
-  origin?: string | string[];
-  country?: string | string[];
-  device?: string | string[];
-  returning?: string | string[];
+type SearchParams = Record<string, string | string[] | undefined>;
+
+type PageProps = {
+  searchParams: Promise<SearchParams>;
 };
 
 function formatDuration(seconds: number) {
@@ -38,23 +35,20 @@ function parseDate(value?: string) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-export default async function AdminVisitorsPage({
-  searchParams
-}: {
-  searchParams?: SearchParams | Promise<SearchParams>;
-}) {
-  const sp = await Promise.resolve(searchParams ?? {});
+export default async function AdminVisitorsPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/admin/login");
   }
 
-  const from = typeof sp.from === "string" ? sp.from : "";
-  const to = typeof sp.to === "string" ? sp.to : "";
-  const origin = typeof sp.origin === "string" ? sp.origin : "";
-  const country = typeof sp.country === "string" ? sp.country : "";
-  const device = typeof sp.device === "string" ? sp.device : "";
-  const returning = typeof sp.returning === "string" ? sp.returning : "";
+  const getStr = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
+  const from = getStr(sp.from);
+  const to = getStr(sp.to);
+  const origin = getStr(sp.origin);
+  const country = getStr(sp.country);
+  const device = getStr(sp.device);
+  const returning = getStr(sp.returning);
   const queryString = new URLSearchParams(
     Object.entries({ from, to, origin, country, device, returning }).filter(([, value]) => value)
   ).toString();
