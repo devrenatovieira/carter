@@ -437,7 +437,10 @@ export default function ProductForm({
               name="deliveryType"
               value={form.deliveryType}
               onChange={(e) => {
-                setForm({ ...form, deliveryType: e.target.value });
+                setForm({
+                  ...form,
+                  deliveryType: e.target.value as "DELIVERY" | "PICKUP" | "BOTH"
+                });
                 if (errors.pickupLocation) clearFieldError("pickupLocation");
               }}
               className="mt-2 w-full rounded-2xl border border-[var(--border-subtle)] bg-transparent p-3"
