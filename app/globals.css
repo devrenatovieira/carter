@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --max-width: 1200px;
+  --surface: #0a1024;
+  --surface-muted: #111a38;
+  --surface-elevated: rgba(18, 28, 64, 0.84);
+  --surface-card: rgba(22, 34, 78, 0.78);
+  --border-subtle: rgba(139, 154, 255, 0.18);
+  --text-primary: #e7ecff;
+  --text-muted: #b9c4ff;
+  --accent: #9b8dff;
+  --accent-strong: #5f6bff;
+}
+
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  @apply text-ink-500 font-sans leading-relaxed bg-[var(--surface)];
+  background-image:
+    radial-gradient(circle at 12% 16%, rgba(108, 118, 255, 0.25), transparent 42%),
+    radial-gradient(circle at 88% 18%, rgba(138, 120, 255, 0.2), transparent 44%),
+    radial-gradient(circle at 40% 88%, rgba(73, 150, 255, 0.18), transparent 48%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(155, 141, 255, 0.35);
+}
+
+.container {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+a {
+  @apply transition-colors;
+}
+
+.glass {
+  background: var(--surface-elevated);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Skeleton */
+.skeleton {
+  @apply animate-pulse;
+  background: rgba(24, 34, 78, 0.6);
+}

@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")  // pooled (serverless) -> Vercel runtime
+  directUrl = env("DIRECT_URL")    // direct (sem pooler) -> migrations
+}
+
+model Product {
+  id                String       @id @default(uuid())
+  slug              String       @unique
+  title             String
+  shortDescription  String
+  description       String
+  price             Int
+  compareAtPrice    Int?
+  category          String
+  tags              String[]
+  rating            Float        @default(0)
+  images            String[]
+  isFeatured        Boolean      @default(false)
+  isEditorPick      Boolean      @default(false)
+  isFastShipping    Boolean      @default(false)
+  isOfferOfTheDay   Boolean      @default(false)
+  paymentLink       String
+  affiliateParamKey String       @default("afiliado")
+  affiliateIdValue  String       @default("carter")
+  soldCount         Int          @default(0)
+  manualRank        Int?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  deliveryType      DeliveryType @default(BOTH)
+  isActive          Boolean      @default(true)
+  pickupLocation    String?
+
+  @@index([category])
+  @@index([isFeatured, isEditorPick, isFastShipping])
+}
+
+enum DeliveryType {
+  DELIVERY
+  PICKUP
+  BOTH
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("admin")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model Visitor {
+  id               String    @id @default(uuid())
+  visitorId        String    @unique
+  firstVisit       DateTime  @default(now())
+  lastVisit        DateTime  @default(now())
+  isReturning      Boolean   @default(false)
+  city             String?
+  region           String?
+  country          String?
+  deviceType       String?
+  os               String?
+  browser          String?
+  language         String?
+  timeZone         String?
+  totalPageViews   Int       @default(0)
+  totalTimeSeconds Int       @default(0)
+  referrer         String?
+  utmSource        String?
+  utmMedium        String?
+  utmCampaign      String?
+  utmTerm          String?
+  utmContent       String?
+  ipMasked         String?
+  sessions         Session[]
+  events           Event[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([lastVisit])
+  @@index([country, deviceType])
+  @@index([isReturning])
+}
+
+model Session {
+  id              String   @id @default(uuid())
+  sessionKey      String   @unique
+  visitorId       String
+  startedAt       DateTime @default(now())
+  endedAt         DateTime?
+  durationSeconds Int      @default(0)
+  pageViews       Int      @default(0)
+  visitor         Visitor  @relation(fields: [visitorId], references: [visitorId], onDelete: Cascade)
+  events          Event[]
+
+  @@index([visitorId, startedAt])
+}
+
+model Event {
+  id         String   @id @default(uuid())
+  visitorId  String
+  sessionKey String?
+  type       String
+  url        String
+  data       Json?
+  createdAt  DateTime @default(now())
+  visitor    Visitor  @relation(fields: [visitorId], references: [visitorId], onDelete: Cascade)
+  session    Session? @relation(fields: [sessionKey], references: [sessionKey], onDelete: SetNull)
+
+  @@index([visitorId, createdAt])
+  @@index([type])
+}
