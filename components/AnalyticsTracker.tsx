@@ -34,12 +34,16 @@ function getOrCreateVisitorId() {
     id = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
     try {
       localStorage.setItem(VISITOR_KEY, id);
-    } catch {}
+    } catch {
+      // Ignore storage errors; tracking should not break the app.
+    }
   }
 
   try {
     document.cookie = `${VISITOR_KEY}=${id}; path=/; max-age=31536000; samesite=lax`;
-  } catch {}
+  } catch {
+    // Ignore cookie errors; tracking should not break the app.
+  }
 
   return id;
 }
@@ -63,7 +67,9 @@ function getOrCreateSessionKey() {
   try {
     localStorage.setItem(SESSION_KEY, sessionKey);
     localStorage.setItem(LAST_ACTIVITY_KEY, String(now));
-  } catch {}
+  } catch {
+    // Ignore storage errors; tracking should not break the app.
+  }
 
   return sessionKey;
 }
@@ -71,7 +77,9 @@ function getOrCreateSessionKey() {
 function updateLastActivity() {
   try {
     localStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now()));
-  } catch {}
+  } catch {
+    // Ignore storage errors; tracking should not break the app.
+  }
 }
 
 function parseDevice() {
