@@ -1,10 +1,14 @@
-import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth/next";
+import { notFound, redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import AdminShell from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
+
+type Props = {
+  params: { visitorId: string };
+};
 
 function formatDuration(seconds: number) {
   const mins = Math.floor(seconds / 60);
@@ -15,14 +19,14 @@ function formatDuration(seconds: number) {
   return `${seconds}s`;
 }
 
-export default async function VisitorDetailPage({
-  params
-}: {
-  params: { visitorId: string };
-}) {
+export default async function Page({ params }: Props) {
+  const { visitorId } = params;
   const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/admin/login");
+  }
   const visitor = await prisma.visitor.findUnique({
-    where: { visitorId: params.visitorId }
+    where: { visitorId }
   });
 
   if (!visitor) {
@@ -31,11 +35,11 @@ export default async function VisitorDetailPage({
 
   const [sessions, events] = await Promise.all([
     prisma.session.findMany({
-      where: { visitorId: params.visitorId },
+      where: { visitorId },
       orderBy: { startedAt: "desc" }
     }),
     prisma.event.findMany({
-      where: { visitorId: params.visitorId },
+      where: { visitorId },
       orderBy: { createdAt: "desc" },
       take: 300
     })
