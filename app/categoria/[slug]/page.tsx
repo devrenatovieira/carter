@@ -7,10 +7,15 @@ import { categoryToSlug } from '@/lib/categories';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const products = await getProducts();
   const categories = Array.from(new Set(products.map((p) => p.category)));
-  const category = categories.find((c) => categoryToSlug(c) === params.slug);
+  const category = categories.find((c) => categoryToSlug(c) === slug);
   if (!category) return {};
   return {
     title: category,
@@ -18,10 +23,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = await params;
   const products = await getProducts();
   const categories = Array.from(new Set(products.map((p) => p.category)));
-  const category = categories.find((c) => categoryToSlug(c) === params.slug);
+  const category = categories.find((c) => categoryToSlug(c) === slug);
   if (!category) notFound();
 
   const items = products.filter((p) => p.category === category);
