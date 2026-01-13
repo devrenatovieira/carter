@@ -1,10 +1,11 @@
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 type TrackEvent = {
   type: "page_view" | "click" | "scroll" | "time_on_page";
   url: string;
-  data?: Record<string, unknown>;
+  data?: Prisma.InputJsonValue | null;
   durationSeconds?: number;
 };
 
@@ -38,6 +39,12 @@ function maskIp(raw: string | null) {
   const octets = ip.split(".");
   if (octets.length !== 4) return null;
   return `${octets[0]}.${octets[1]}.${octets[2]}.0`;
+}
+
+function toPrismaJson(value: unknown): Prisma.InputJsonValue | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null as unknown as Prisma.InputJsonValue;
+  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
 
 export async function POST(req: NextRequest) {
@@ -154,7 +161,7 @@ export async function POST(req: NextRequest) {
       sessionKey,
       type: event.type,
       url: event.url,
-      data: event.data || (timeInc ? { durationSeconds: timeInc } : undefined)
+      data: toPrismaJson(event.data ?? (timeInc ? { durationSeconds: timeInc } : undefined))
     }
   });
 
