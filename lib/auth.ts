@@ -1,18 +1,19 @@
 // lib/auth.ts
-import type { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import type { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { compare } from "bcryptjs";
+import { prisma } from "@/lib/db";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET, // <- ESSENCIAL no deploy
+
   providers: [
     CredentialsProvider({
-      name: 'Admin',
+      name: "Admin",
       credentials: {
-        username: { label: 'Usuário', type: 'text' },
-        password: { label: 'Senha', type: 'password' },
+        username: { label: "Usuário", type: "text" },
+        password: { label: "Senha", type: "password" },
       },
-
       async authorize(credentials) {
         const username = credentials?.username?.trim();
         const password = credentials?.password;
@@ -25,26 +26,22 @@ export const authOptions: NextAuthOptions = {
 
         if (!admin || !admin.isActive) return null;
 
-        const valid = await compare(password, admin.passwordHash);
-        if (!valid) return null;
+        const ok = await compare(password, admin.passwordHash);
+        if (!ok) return null;
 
+        // Retorne role + username aqui
         return {
           id: admin.id,
-          name: admin.username,
+          name: "Admin Carter",
           username: admin.username,
-          role: admin.role, // admin
+          role: admin.role, // "admin"
         } as any;
       },
     }),
   ],
 
-  session: {
-    strategy: 'jwt',
-  },
-
-  pages: {
-    signIn: '/admin/login',
-  },
+  session: { strategy: "jwt" },
+  pages: { signIn: "/admin/login" },
 
   callbacks: {
     async jwt({ token, user }) {
@@ -54,7 +51,6 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = token.role;
