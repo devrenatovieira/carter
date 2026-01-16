@@ -1,3 +1,4 @@
+// lib/auth.ts
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
@@ -8,9 +9,10 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Admin',
       credentials: {
-        username: { label: 'Usuario', type: 'text' },
+        username: { label: 'Usuário', type: 'text' },
         password: { label: 'Senha', type: 'password' },
       },
+
       async authorize(credentials) {
         const username = credentials?.username?.trim();
         const password = credentials?.password;
@@ -28,23 +30,35 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: admin.id,
-          name: 'Admin Carter',
-          email: admin.username,
-          role: admin.role,
-        };
+          name: admin.username,
+          username: admin.username,
+          role: admin.role, // admin
+        } as any;
       },
     }),
   ],
-  session: { strategy: 'jwt' },
-  pages: { signIn: '/admin/login' },
+
+  session: {
+    strategy: 'jwt',
+  },
+
+  pages: {
+    signIn: '/admin/login',
+  },
+
   callbacks: {
-    jwt({ token, user }) {
-      if (user && 'role' in user) token.role = (user as { role?: string }).role;
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = (user as any).role;
+        token.username = (user as any).username;
+      }
       return token;
     },
-    session({ session, token }) {
+
+    async session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role as string;
+        (session.user as any).role = token.role;
+        (session.user as any).username = token.username;
       }
       return session;
     },
