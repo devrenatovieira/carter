@@ -29,8 +29,8 @@ export default function Support() {
           <h5 className="text-xs uppercase tracking-[0.2em] text-slate-400">FAQ</h5>
           <ul className="mt-3 space-y-2 text-sm text-slate-300">
             <li>Trocas em ate 07 dias</li>
-            <li>Envio premium com rastreio</li>
-            <li>Garantia estendida para pecas selecionadas</li>
+            <li>Envio com rastreio disponíveis em alguns produto</li>
+            <li>Garantia estendida para peças selecionadas</li>
           </ul>
         </div>
       </div>

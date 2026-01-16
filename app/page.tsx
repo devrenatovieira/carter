@@ -29,7 +29,7 @@ export default async function Home() {
           <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Carter</p>
           <h1 className="text-4xl font-serif leading-tight md:text-5xl">Carter - lojas manauara exclusivas shopay-canvi.</h1>
           <p className="max-w-xl text-slate-300">
-            Peças essenciais, acabamento impecavel e experiencia premium. Produtos originais. Pagamentos processados pelo parceiro Shopay-Canvi.
+            Peças essenciais, acabamento impecável. Produtos originais. Pagamentos processados pelo parceiro Shopay-Canvi.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild>

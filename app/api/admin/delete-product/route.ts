@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session || session.user?.role !== 'admin') {
-    return new Response('Nao autorizado', { status: 401 });
+    return new Response('Não autorizado', { status: 401 });
   }
 
   const body = await req.json();

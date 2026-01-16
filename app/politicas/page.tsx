@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function Politicas() {
+  const updatedAt = new Date().toLocaleDateString("pt-BR");
   return (
     <div className="space-y-10">
       <header className="space-y-2">
@@ -30,7 +31,7 @@ export default function Politicas() {
         <div className="space-y-3 text-sm text-slate-300">
           <p className="font-medium text-slate-100">Direito de arrependimento (compras online)</p>
           <p>
-            Você pode solicitar devolução em até <span className="font-medium text-slate-100">7 (sete) dias corridos</span>{" "}
+            Você pode solicitar devolução em até <span className="font-medium text-slate-100">7 (sete) dias corridos em alguns produtos</span>{" "}
             após o recebimento do pedido, conforme o CDC, desde que o produto esteja{" "}
             <span className="font-medium text-slate-100">sem uso</span>, com{" "}
             <span className="font-medium text-slate-100">embalagem original</span> e{" "}
@@ -56,7 +57,7 @@ export default function Politicas() {
         <div className="space-y-2">
           <h2 className="text-xl font-serif">🔐 Política de Privacidade e Proteção de Dados – Carter</h2>
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-            Última atualização: 14 / 01 / 2026
+            Última atualização: {updatedAt}
           </p>
         </div>
 
@@ -238,9 +239,9 @@ export default function Politicas() {
             <p className="font-medium text-slate-100">11. Contato</p>
             <p>
               Para solicitações relacionadas à privacidade:{" "}
-              <span className="font-medium text-slate-100">privacidade@carter.com</span>
+              <span className="font-medium text-slate-100">privacidade@carter.com.br</span>
               <br />
-              Suporte: <span className="font-medium text-slate-100">suporte@carter.com</span>
+              Suporte: <span className="font-medium text-slate-100">suporte@carter.com.br</span>
             </p>
           </li>
         </ol>

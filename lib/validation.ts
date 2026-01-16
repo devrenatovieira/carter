@@ -54,7 +54,7 @@ export const productSchema = z
     manualRank: z.coerce.number().int().min(0).optional().nullable()
   })
   .superRefine((data, ctx) => {
-    // Se tiver retirada (PICKUP ou BOTH), local de retirada é obrigatório
+   
     if ((data.deliveryType === 'PICKUP' || data.deliveryType === 'BOTH') && !data.pickupLocation) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -63,7 +63,7 @@ export const productSchema = z
       });
     }
 
-    // Regra opcional: compareAtPrice precisa ser maior ou igual ao price
+    
     if (data.compareAtPrice != null && data.compareAtPrice < data.price) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

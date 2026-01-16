@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const steps = [
   {
     title: "Curadoria de produtos",
-    description: "Selecionamos itens com qualidade, reputacao e boa experiencia de compra.",
+    description: "Selecionamos itens com qualidade, reputação e boa experiencia de compra.",
     icon: CheckCircle2
   },
   {
@@ -47,17 +47,17 @@ const values = [
 
 const deliveries = [
   { title: "Curadoria", description: "Produtos selecionados com criterio e consistencia." },
-  { title: "Seguranca", description: "Checkout com parceiros confiaveis e fluxo transparente." },
+  { title: "Segurança", description: "Checkout com parceiros confiaveis e fluxo transparente." },
   { title: "Atendimento", description: "Suporte para ajudar antes, durante e depois da compra." },
   { title: "Praticidade", description: "Compra rapida e objetiva em um unico lugar." },
-  { title: "Variedade", description: "Selecao ampla de categorias e estilos." },
+  { title: "Variedade", description: "Seleção ampla de categorias e estilos." },
   { title: "Experiencia", description: "Interface clara, elegante e focada no cliente." }
 ];
 
 const faqs = [
   {
     q: "A Carter fabrica os produtos?",
-    a: "Nao. A Carter atua como vitrine e curadoria, conectando voce a produtos de parceiros homologados."
+    a: "Não. A Carter atua como vitrine e curadoria, conectando voce a produtos de parceiros homologados."
   },
   {
     q: "Quem envia os pedidos?",
@@ -73,7 +73,7 @@ const faqs = [
   },
   {
     q: "Como a Carter seleciona parceiros?",
-    a: "Avaliamos confiabilidade, entrega, reputacao e padroes de atendimento."
+    a: "Avaliamos confiabilidade, entrega, reputação e padroes de atendimento."
   }
 ];
 
@@ -108,8 +108,8 @@ export default function SobrePage() {
             e atuamos como distribuidor digital com foco em experiencia, pagamento seguro e suporte.
           </p>
           <p className="text-sm text-slate-300">
-            Nao fabricamos produtos: somos vitrine, curadoria e canal de venda. Nosso papel e garantir transparencia e
-            facilitar o caminho entre voce e fornecedores confiaveis.
+            Não fabricamos produtos: somos vitrine, curadoria e canal de venda. Nosso papel e garantir transparência e
+            facilitar o caminho entre você e fornecedores confiáveis.
           </p>
         </div>
         <Card>
@@ -122,7 +122,7 @@ export default function SobrePage() {
           <CardContent>
             <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Parceiros</div>
             <div className="mt-2 text-sm text-slate-300">
-              Trabalhamos com fornecedores homologados, garantindo padroes de qualidade e atendimento.
+              Trabalhamos com fornecedores homologados, garantindo padrões de qualidade e atendimento.
             </div>
           </CardContent>
         </Card>
@@ -133,7 +133,7 @@ export default function SobrePage() {
       <section className="space-y-6">
         <div className="space-y-2">
           <h2 className="text-2xl font-serif">Como funciona</h2>
-          <p className="text-sm text-slate-300">Transparencia em quatro passos simples.</p>
+          <p className="text-sm text-slate-300">Transparência em quatro passos simples.</p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {steps.map((step) => {
@@ -160,16 +160,16 @@ export default function SobrePage() {
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Missao</CardTitle>
+            <CardTitle>Missão</CardTitle>
             <CardDescription>
-              Oferecer acesso a produtos selecionados, com transparencia, seguranca e uma experiencia simples.
+              Oferecer acesso a produtos selecionados, com transparência, segurança e uma experiência simples.
             </CardDescription>
           </CardHeader>
         </Card>
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Visao</CardTitle>
-            <CardDescription>Ser referencia entre plataformas afiliadas de curadoria no Brasil.</CardDescription>
+            <CardTitle>Visão</CardTitle>
+            <CardDescription>Ser referência entre plataformas afiliadas de curadoria no Brasil.</CardDescription>
           </CardHeader>
         </Card>
         <Card className="lg:col-span-1">
@@ -194,7 +194,7 @@ export default function SobrePage() {
       <section className="space-y-6">
         <div className="space-y-2">
           <h2 className="text-2xl font-serif">O que a Carter entrega</h2>
-          <p className="text-sm text-slate-300">Uma experiencia premium do inicio ao fim.</p>
+          <p className="text-sm text-slate-300">Uma experiência de qualidade do início ao fim.</p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {deliveries.map((item) => (
@@ -237,7 +237,7 @@ export default function SobrePage() {
             <Link href="/catalogo">Ver produtos</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/transparencia">Transparencia</Link>
+            <Link href="/transparencia">Transparência</Link>
           </Button>
         </div>
       </section>

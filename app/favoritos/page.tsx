@@ -55,7 +55,7 @@ export default function FavoritosPage() {
 
       {!hasIds ? (
         <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-sm text-slate-300">
-          Voce ainda nao tem favoritos. Salve produtos para ver aqui.
+          Voce ainda não tem favoritos. Salve produtos para ver aqui.
           <div className="mt-4">
             <Link href="/catalogo" className="text-xs uppercase tracking-[0.2em] text-slate-400 hover:text-[var(--accent)]">
               Ir para o catalogo

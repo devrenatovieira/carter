@@ -61,7 +61,7 @@ export default function Filters({
           <div className="mt-2 text-sm text-slate-300">Ate {formatPriceBRL(filters.maxPrice)}</div>
         </div>
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-slate-400">Avaliacao minima</label>
+          <label className="mb-2 block text-xs uppercase tracking-[0.14em] text-slate-400">Avaliação mínima</label>
           <select
             className="w-full rounded-2xl border border-[var(--border-subtle)] bg-transparent p-3 text-sm"
             value={filters.rating}

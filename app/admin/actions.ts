@@ -17,8 +17,8 @@ type ActionResult =
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
   if (!session || session.user?.role !== "admin") {
-    // não joga 500 genérico: devolve um erro tratável
-    throw new Error("Nao autorizado");
+
+    throw new Error("Não autorizado");
   }
 }
 
@@ -118,7 +118,7 @@ export async function createProduct(formData: FormData): Promise<ActionResult> {
   } catch (e: any) {
     const msg = String(e?.message || "Erro interno");
 
-    if (msg.toLowerCase().includes("nao autorizado")) {
+    if (msg.toLowerCase().includes("não autorizado")) {
       return { ok: false, formError: "Não autorizado. Faça login novamente." };
     }
 
@@ -144,11 +144,11 @@ export async function updateProduct(formData: FormData): Promise<ActionResult> {
     revalidatePath("/admin");
     revalidatePath(`/produto/${parsed.data.slug}`);
 
-    // Força retorno ao admin para refletir alterações mesmo sem mudanças visíveis.
+    
     return { ok: true };
   } catch (e: any) {
     const msg = String(e?.message || "Erro interno");
-    if (msg.toLowerCase().includes("nao autorizado")) {
+    if (msg.toLowerCase().includes("não autorizado")) {
       return { ok: false, formError: "Não autorizado. Faça login novamente." };
     }
     return { ok: false, formError: "Erro interno ao atualizar. Veja o terminal do dev server." };
@@ -167,7 +167,25 @@ export async function deleteProduct(formData: FormData): Promise<ActionResult> {
     return { ok: true };
   } catch (e: any) {
     const msg = String(e?.message || "Erro interno");
-    if (msg.toLowerCase().includes("nao autorizado")) {
+    if (msg.toLowerCase().includes("não autorizado")) {
+      return { ok: false, formError: "Não autorizado. Faça login novamente." };
+    }
+    return { ok: false, formError: "Erro interno ao excluir. Veja o terminal do dev server." };
+  }
+}
+
+export async function deleteVisitor(formData: FormData): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    const visitorId = formData.get("visitorId")?.toString();
+    if (!visitorId) return { ok: false, formError: "ID ausente." };
+    await prisma.visitor.delete({ where: { visitorId } });
+    revalidatePath("/admin/usuarios");
+    revalidatePath(`/admin/usuarios/${visitorId}`);
+    return { ok: true };
+  } catch (e: any) {
+    const msg = String(e?.message || "Erro interno");
+    if (msg.toLowerCase().includes("não autorizado")) {
       return { ok: false, formError: "Não autorizado. Faça login novamente." };
     }
     return { ok: false, formError: "Erro interno ao excluir. Veja o terminal do dev server." };

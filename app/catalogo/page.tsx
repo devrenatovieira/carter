@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Catalogo',
-  description: 'Explore o catálogo Carter com filtros premium e busca instantanea.'
+  description: 'Explore o catálogo Carter com filtros e busca instântanea.'
 };
 
 export default async function CatalogPage() {

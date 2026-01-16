@@ -4,6 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import AdminShell from "@/components/admin/AdminShell";
+import { deleteVisitor } from "@/app/admin/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -101,7 +102,7 @@ export default async function AdminVisitorsPage({ searchParams }: PageProps) {
         active="usuarios"
       />
 
-      <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+      {/* <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
         <form className="grid grid-cols-1 gap-4 md:grid-cols-6">
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-[0.2em] text-slate-400">De</label>
@@ -151,64 +152,122 @@ export default async function AdminVisitorsPage({ searchParams }: PageProps) {
             </Link>
           </div>
         </form>
-      </div>
+      </div> */}
 
-      <div className="overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
-        <div className="overflow-x-auto">
-          <table className="min-w-[1200px] w-full text-left text-sm">
-            <thead className="bg-[var(--surface-card)] text-xs uppercase tracking-[0.2em] text-slate-400">
-              <tr>
-                <th className="px-4 py-3">Visitor ID</th>
-                <th className="px-4 py-3">Novo/Retornou</th>
-                <th className="px-4 py-3">Cidade/Estado/País</th>
-                <th className="px-4 py-3">Dispositivo</th>
-                <th className="px-4 py-3">Sistema</th>
-                <th className="px-4 py-3">Navegador</th>
-                <th className="px-4 py-3">Idioma</th>
-                <th className="px-4 py-3">Fuso horário</th>
-                <th className="px-4 py-3">Primeira visita</th>
-                <th className="px-4 py-3">Última visita</th>
-                <th className="px-4 py-3">Páginas</th>
-                <th className="px-4 py-3">Tempo total</th>
-                <th className="px-4 py-3">Origem</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visitors.length === 0 ? (
-                <tr>
-                  <td colSpan={13} className="px-4 py-6 text-center text-sm text-slate-400">
-                    Nenhum visitante encontrado para os filtros atuais.
-                  </td>
-                </tr>
-              ) : (
-                visitors.map((visitor) => (
-                  <tr key={visitor.visitorId} className="border-t border-[var(--border-subtle)]">
-                    <td className="px-4 py-3 font-mono text-xs">
-                      <Link href={`/admin/usuarios/${visitor.visitorId}`} className="hover:text-[var(--accent)]">
+      <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Lista de acessos</div>
+          <div className="text-sm text-slate-300">{visitors.length} registros</div>
+        </div>
+        <div className="mt-6 max-h-[70vh] overflow-y-auto pr-2">
+          {visitors.length === 0 ? (
+            <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-8 text-center text-sm text-slate-400">
+              Nenhum visitante encontrado para os filtros atuais.
+            </div>
+          ) : (
+            <ul className="space-y-4">
+              {visitors.map((visitor) => (
+                <li key={visitor.visitorId} className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="space-y-2">
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Visitor ID</div>
+                      <Link href={`/admin/usuarios/${visitor.visitorId}`} className="font-mono text-xs hover:text-[var(--accent)]">
                         {visitor.visitorId}
                       </Link>
-                    </td>
-                    <td className="px-4 py-3">{visitor.isReturning ? "Retornou" : "Novo"}</td>
-                    <td className="px-4 py-3">
-                      {[visitor.city, visitor.region, visitor.country].filter(Boolean).join(" / ") || "—"}
-                    </td>
-                    <td className="px-4 py-3">{visitor.deviceType || "—"}</td>
-                    <td className="px-4 py-3">{visitor.os || "—"}</td>
-                    <td className="px-4 py-3">{visitor.browser || "—"}</td>
-                    <td className="px-4 py-3">{visitor.language || "—"}</td>
-                    <td className="px-4 py-3">{visitor.timeZone || "—"}</td>
-                    <td className="px-4 py-3">{visitor.firstVisit.toLocaleString("pt-BR")}</td>
-                    <td className="px-4 py-3">{visitor.lastVisit.toLocaleString("pt-BR")}</td>
-                    <td className="px-4 py-3">{visitor.totalPageViews}</td>
-                    <td className="px-4 py-3">{formatDuration(visitor.totalTimeSeconds)}</td>
-                    <td className="px-4 py-3">
-                      {visitor.utmSource || visitor.referrer || "—"}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                        {visitor.isReturning ? "Retornou" : "Novo"}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Link
+                        href={`/admin/usuarios/${visitor.visitorId}`}
+                        className="text-xs uppercase tracking-[0.2em] text-slate-400 hover:text-[var(--accent)]"
+                      >
+                        Ver detalhes
+                      </Link>
+                      <form action={deleteVisitor}>
+                        <input type="hidden" name="visitorId" value={visitor.visitorId} />
+                        <button type="submit" className="text-xs uppercase tracking-[0.2em] text-red-300 hover:text-red-200">
+                          Excluir
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Cidade/Estado/País</div>
+                      <div className="text-sm">{[visitor.city, visitor.region, visitor.country].filter(Boolean).join(" / ") || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Dispositivo</div>
+                      <div className="text-sm">{visitor.deviceType || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Sistema</div>
+                      <div className="text-sm">{visitor.os || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Navegador</div>
+                      <div className="text-sm">{visitor.browser || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Idioma</div>
+                      <div className="text-sm">{visitor.language || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Fuso horário</div>
+                      <div className="text-sm">{visitor.timeZone || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Primeira visita</div>
+                      <div className="text-sm">{visitor.firstVisit.toLocaleString("pt-BR")}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Última visita</div>
+                      <div className="text-sm">{visitor.lastVisit.toLocaleString("pt-BR")}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Páginas</div>
+                      <div className="text-sm">{visitor.totalPageViews}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Tempo total</div>
+                      <div className="text-sm">{formatDuration(visitor.totalTimeSeconds)}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Origem</div>
+                      <div className="text-sm break-words">{visitor.utmSource || visitor.referrer || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Referrer</div>
+                      <div className="text-sm break-words">{visitor.referrer || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">UTM Medium</div>
+                      <div className="text-sm">{visitor.utmMedium || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">UTM Campanha</div>
+                      <div className="text-sm">{visitor.utmCampaign || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">UTM Termo</div>
+                      <div className="text-sm">{visitor.utmTerm || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">UTM Conteúdo</div>
+                      <div className="text-sm">{visitor.utmContent || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-400">IP mascarado</div>
+                      <div className="text-sm">{visitor.ipMasked || "—"}</div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
