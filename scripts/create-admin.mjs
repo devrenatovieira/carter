@@ -3,21 +3,35 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const username = process.argv[2];
-const password = process.argv[3];
+const username = "renato.vieira";
+const password = "Carter@123"; 
 
-if (!username || !password) {
-  console.log('Uso: node scripts/create-admin.mjs <username> <password>');
-  process.exit(1);
+async function main() {
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  const admin = await prisma.adminUser.upsert({
+    where: { username },
+    update: {
+      passwordHash,
+      role: "ADMIN",
+      isActive: true,
+    },
+    create: {
+      username,
+      passwordHash,
+      role: "ADMIN",
+      isActive: true,
+    },
+  });
+
+  console.log("✅ Admin pronto:", admin.username);
 }
 
-const passwordHash = await bcrypt.hash(password, 10);
-
-await prisma.adminUser.upsert({
-  where: { username },
-  update: { passwordHash, isActive: true, role: "admin" },
-  create: { username, passwordHash, isActive: true, role: "admin" },
-});
-
-console.log("Admin criado/atualizado:", username);
-await prisma.$disconnect();
+main()
+  .catch((e) => {
+    console.error("❌ Erro:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
