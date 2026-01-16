@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 export default function WishlistButton({
   productId,
   className,
-  savedLabel = 'Favorito',
-  unsavedLabel = 'Salvar'
-}: {
+  savedLabel = '',
+  unsavedLabel = '',
+}:
+{
   productId: string;
   className?: string;
   savedLabel?: string;

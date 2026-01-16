@@ -116,7 +116,10 @@ export default function Footer() {
 
       {/* Rodapé inferior */}
       <div className="container pt-10 text-xs uppercase tracking-[0.2em] text-slate-400">
-        Copyright {new Date().getFullYear()} Carter — Pagamentos processados por{" "}
+        <Link href="/admin/login" className="hover:text-[var(--accent)]">
+          Copyright
+        </Link>{" "}
+        {new Date().getFullYear()} Carter — Pagamentos processados por{" "}
         <a
           href="https://painel.shopay.com.br/vitrine-shopay?c=264f9420-9536-4c3d-b406-5cf10895c37e"
           target="_blank"
@@ -135,12 +138,9 @@ export default function Footer() {
           Canvi
         </a>
         {" — "}
-        <Link href="/admin/login" className="hover:text-[var(--accent)]">
-          Todos os direitos reservados.
-        </Link>{" "}
-        Desenvolvido por{" "}
+        Todos os direitos reservados. Desenvolvido por{" "}
         <a
-          href="https://www.linkedin.com/in/devrenatovieira/"
+          href="https://devrenatovieira.cartergroup.com.br/"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-[var(--accent)] underline underline-offset-4"

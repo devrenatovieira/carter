@@ -6,7 +6,7 @@ import AdminShell from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
 
-type Props = {
+type PageProps = {
   params: Promise<{ visitorId: string }>;
 };
 
@@ -19,7 +19,7 @@ function formatDuration(seconds: number) {
   return `${seconds}s`;
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const { visitorId } = await params;
   const session = await getServerSession(authOptions);
   if (!session) {

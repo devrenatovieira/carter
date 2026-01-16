@@ -96,7 +96,7 @@ export default async function AdminVisitorsPage({ searchParams }: PageProps) {
     <div className="space-y-8">
       <AdminShell
         userName={session?.user?.name}
-        title="Informações de Usuários"
+        title="Informações de Acessos"
         description="Dados anonimizados de visitantes e comportamento no site."
         active="usuarios"
       />

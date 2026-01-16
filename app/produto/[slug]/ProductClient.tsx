@@ -85,8 +85,8 @@ export default function ProductClient({ product, related }: { product: Product; 
             <Button onClick={handleAddToCart}>Adicionar ao carrinho</Button>
             <WishlistButton
               productId={product.id}
-              savedLabel="Favorito"
-              unsavedLabel="Adicionar aos favoritos"
+              savedLabel="Remover dos Favoritos"
+              unsavedLabel="Adicionar aos Favoritos"
               className="rounded-full border border-[var(--border-subtle)] px-5 py-2 text-xs uppercase tracking-[0.2em] text-slate-300 hover:text-[var(--accent)]"
             />
           </div>
