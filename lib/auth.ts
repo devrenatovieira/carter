@@ -5,7 +5,8 @@ import { compare } from "bcryptjs";
 import { prisma } from "@/lib/db";
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET, // <- ESSENCIAL no deploy
+  
+  secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
     CredentialsProvider({
@@ -29,12 +30,12 @@ export const authOptions: NextAuthOptions = {
         const ok = await compare(password, admin.passwordHash);
         if (!ok) return null;
 
-        // Retorne role + username aqui
+       
         return {
           id: admin.id,
           name: "Admin Carter",
           username: admin.username,
-          role: admin.role, // "admin"
+          role: String(admin.role || "").toLowerCase(),
         } as any;
       },
     }),
@@ -45,16 +46,18 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
+     
       if (user) {
-        token.role = (user as any).role;
-        token.username = (user as any).username;
+        (token as any).role = String((user as any).role || "").toLowerCase();
+        (token as any).username = String((user as any).username || "");
       }
       return token;
     },
+
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role;
-        (session.user as any).username = token.username;
+        (session.user as any).role = String((token as any).role || "").toLowerCase();
+        (session.user as any).username = String((token as any).username || "");
       }
       return session;
     },
